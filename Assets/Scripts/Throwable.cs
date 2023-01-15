@@ -6,7 +6,7 @@ public class Throwable : Interactable
 {
     public float throwForce = 1000;
     public float upForce = 300;
-    protected bool thrown = false;
+    public bool thrown { get; protected set; }
 
     protected override void Start()
     {

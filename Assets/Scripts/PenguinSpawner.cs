@@ -11,7 +11,7 @@ public class PenguinSpawner : MonoBehaviour
     public int penguinCount = 100;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //Spawn all the penguins
         for (int i = 0; i < penguinCount; i++)

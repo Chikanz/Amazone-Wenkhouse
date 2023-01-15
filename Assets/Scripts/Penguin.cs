@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using dook.tools.animatey;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Penguin : Throwable
 {
@@ -17,8 +19,22 @@ public class Penguin : Throwable
     public float idleChance = 0.7f;
 
     private Vector3? walkGoal;
-
     private NavMeshAgent agent;
+
+    public Animator ExlamAC;
+
+    public bool Hungry { get; private set; }
+
+    private AudioSource AS;
+    private static readonly int Exclaim = Animator.StringToHash("Exclaim");
+
+    private Collider[] playerCols = new Collider[2];
+
+    protected void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        AS = GetComponent<AudioSource>();
+    }
 
     protected override void Start()
     {
@@ -28,11 +44,10 @@ public class Penguin : Throwable
             transform.rotation = Quaternion.Slerp(fallRot, Quaternion.identity, val);
             transform.position = Vector3.Lerp(transform.position, fallPos, val);
 
-            if (val >= 1) 
+            if (val >= 1)
                 agent.enabled = true;
         };
 
-        agent = GetComponent<NavMeshAgent>();
 
         ChooseNextBehaviour();
     }
@@ -40,19 +55,31 @@ public class Penguin : Throwable
     protected override void Update()
     {
         base.Update();
-        
-        // If we're not falling, we can walk
-        // if (walkGoal != null )
-        // {
-        //     transform.position = Vector3.MoveTowards(transform.position, walkGoal.Value, walkSpeed * Time.deltaTime);
-        //     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(walkGoal.Value - transform.position), 0.1f);
-        // }
 
-        // If we're close enough to our goal, choose a new one
-        if (agent.hasPath && agent.remainingDistance < 0.5f)
+        //look at nearest player
+        if (Hungry)
         {
-            CancelInvoke(nameof(ChooseNextBehaviour));
-            ChooseNextBehaviour();
+            var length = Physics.OverlapSphereNonAlloc(transform.position, 20, playerCols, 1 << 8);
+            
+            //Get closest
+            float closestDist = 999;
+            int closestIndex = -1;
+            for (int i = 0; i < length; i++)
+            {
+                if(Vector3.Distance(transform.position, playerCols[i].transform.position) < closestDist)
+                {
+                    closestDist = Vector3.Distance(transform.position, playerCols[i].transform.position);
+                    closestIndex = i;
+                }
+            }
+            
+            //look at closest
+            if (closestIndex != -1)
+            {
+                var direction = playerCols[closestIndex].transform.position - transform.position;
+                direction.y = 0;
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
         }
     }
 
@@ -85,7 +112,7 @@ public class Penguin : Throwable
 
     private void ChooseNextBehaviour()
     {
-        if (!pickedUp && !thrown && agent.enabled)
+        if (!pickedUp && !thrown && agent.enabled && !Hungry)
         {
             if (Random.value <= idleChance)
             {
@@ -112,5 +139,24 @@ public class Penguin : Throwable
     {
         base.Pickup(cameraRoot);
         agent.enabled = !pickedUp;
+    }
+
+    public void MakeHungry()
+    {
+        CancelInvoke(nameof(ChooseNextBehaviour));
+        Hungry = true;
+        agent.enabled = false;
+        AS.Play();
+
+        ExlamAC.gameObject.SetActive(true);
+        ExlamAC.SetTrigger(Exclaim);
+    }
+
+    public void Feed()
+    {
+        Hungry = false;
+        AS.Stop();
+        ExlamAC.gameObject.SetActive(false);
+        ChooseNextBehaviour();
     }
 }

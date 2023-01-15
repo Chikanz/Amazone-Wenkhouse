@@ -8,6 +8,9 @@ public class Interactable : MonoBehaviour
     protected Rigidbody RB;
     protected bool pickedUp = false;
     new protected Collider collider;
+
+    public int? HeldByPlayer = null;
+    private Player heldBy;
     
     protected virtual void Start()
     {
@@ -28,8 +31,11 @@ public class Interactable : MonoBehaviour
         Transform anchor = t.Find("Cam Anchor");
         
         collider.enabled = false;
-        RB.velocity = Vector3.zero;
-        RB.isKinematic = true;
+        if(RB)
+        {
+            RB.velocity = Vector3.zero;
+            RB.isKinematic = true;
+        }
 
         t.SetParent(cameraRoot);
         t.localPosition = anchor.localPosition;
@@ -37,6 +43,11 @@ public class Interactable : MonoBehaviour
         t.localScale = anchor.localScale;
 
         pickedUp = true;
+        
+        //Set HeldByPlayer to the player's ID
+        var player = cameraRoot.parent.GetComponentInChildren<Player>();
+        HeldByPlayer = player.PlayerID;
+        heldBy = player;
     }
 
     public virtual void Use(Transform cameraRoot)
@@ -59,10 +70,16 @@ public class Interactable : MonoBehaviour
         }
         GetComponent<Collider>().enabled = true;
         pickedUp = false;
+        HeldByPlayer = null;
     }
 
     protected void ResetScale()
     {
         transform.localScale = defaultScale;
+    }
+
+    protected void FinishedTask()
+    {
+        if(heldBy) heldBy.GetComponent<JEFF>().TaskCompleted();
     }
 }
