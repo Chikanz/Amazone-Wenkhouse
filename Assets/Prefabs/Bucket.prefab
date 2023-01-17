@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fish: {fileID: 8957398010723595903, guid: 59d4b4e9ab5dfa44ebc8dce4e14371f9, type: 3}
-  fishForce: 350
+  fishForce: 450
 --- !u!65 &269591039587976066
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -279,6 +279,7 @@ GameObject:
   - component: {fileID: 3411445439987105502}
   - component: {fileID: 4714406520630903334}
   - component: {fileID: 4226461849158018019}
+  - component: {fileID: 3287729537746948025}
   m_Layer: 8
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -338,7 +339,7 @@ MonoBehaviour:
   RotationSpeed: 1
   SpeedChangeRate: 10
   JumpHeight: 1.2
-  Gravity: -15
+  Gravity: -20
   JumpTimeout: 0.1
   FallTimeout: 0.15
   Grounded: 1
@@ -566,6 +567,7 @@ MonoBehaviour:
   Blackout: {fileID: 0}
   penguinKOTime: 0.6
   PlayerID: 0
+  slipInvuln: 4
 --- !u!54 &4714406520630903334
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -598,3 +600,19 @@ MonoBehaviour:
   ClockUI: {fileID: 0}
   LivesUI: {fileID: 0}
   lives: 3
+--- !u!111 &3287729537746948025
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616685848737228372}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: d143550ecd271ed4f999ba799c286439, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: d143550ecd271ed4f999ba799c286439, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0

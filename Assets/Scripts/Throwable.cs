@@ -18,7 +18,7 @@ public class Throwable : Interactable
         base.Update();
     }
 
-    public override void Use(Transform cameraRoot)
+    public override bool Use(Transform cameraRoot)
     {
         base.Use(cameraRoot);
 
@@ -36,6 +36,8 @@ public class Throwable : Interactable
         }
         
         StartCoroutine(WaitForThrown());
+
+        return true; //Drop this bitch
     }
 
     public override void Pickup(Transform cameraRoot)

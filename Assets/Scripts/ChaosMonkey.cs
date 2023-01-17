@@ -6,7 +6,7 @@ using UnityEngine;
 public class ChaosMonkey : MonoBehaviour
 {
     public Vector2 penguinHungryRate = new Vector2(5, 10);
-    public int maxHungry = 5;
+    public int maxHungry = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +37,9 @@ public class ChaosMonkey : MonoBehaviour
         if (hungryPenguins < maxHungry)
         {
             PenguinsGOs[Random.Range(0, PenguinsGOs.Length)].GetComponent<Penguin>().MakeHungry();
-            Invoke(nameof(HungerPenguins), Random.Range(penguinHungryRate.x, penguinHungryRate.y));
+            print("hungy");
         }
+        
+        Invoke(nameof(HungerPenguins), Random.Range(penguinHungryRate.x, penguinHungryRate.y));
     }
 }

@@ -48,7 +48,7 @@ public class Penguin : Throwable
                 agent.enabled = true;
         };
 
-
+        agent.enabled = true; //Agent disabled by default to stop spawn shenannigins
         ChooseNextBehaviour();
     }
 
@@ -77,7 +77,7 @@ public class Penguin : Throwable
             if (closestIndex != -1)
             {
                 var direction = playerCols[closestIndex].transform.position - transform.position;
-                direction.y = 0;
+                // direction.y = 0;
                 transform.rotation = Quaternion.LookRotation(direction);
             }
         }
@@ -103,11 +103,12 @@ public class Penguin : Throwable
         }
     }
 
-    public override void Use(Transform cameraRoot)
+    public override bool Use(Transform cameraRoot)
     {
         StopCoroutine(GetUpAnim.Routine());
         base.Use(cameraRoot);
         agent.enabled = false;
+        return true; //Drop this bitch
     }
 
     private void ChooseNextBehaviour()
@@ -137,6 +138,7 @@ public class Penguin : Throwable
 
     public override void Pickup(Transform cameraRoot)
     {
+        if (Hungry) return;
         base.Pickup(cameraRoot);
         agent.enabled = !pickedUp;
     }

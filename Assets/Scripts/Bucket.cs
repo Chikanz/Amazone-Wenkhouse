@@ -7,7 +7,7 @@ public class Bucket : Interactable
     public GameObject fish;
     public float fishForce = 500;
 
-    public override void Use(Transform cameraRoot)
+    public override bool Use(Transform cameraRoot)
     {
         base.Use(cameraRoot);
         //Spawn a fish + throw
@@ -19,5 +19,6 @@ public class Bucket : Interactable
             FinishedTask();
         };
         Destroy(newFish,20);
+        return false;
     }
 }

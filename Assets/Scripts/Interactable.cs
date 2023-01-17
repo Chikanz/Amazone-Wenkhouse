@@ -6,7 +6,7 @@ public class Interactable : MonoBehaviour
 {
     Vector3 defaultScale = Vector3.zero;
     protected Rigidbody RB;
-    protected bool pickedUp = false;
+    public bool pickedUp { get; protected set; }
     new protected Collider collider;
 
     public int? HeldByPlayer = null;
@@ -50,9 +50,10 @@ public class Interactable : MonoBehaviour
         heldBy = player;
     }
 
-    public virtual void Use(Transform cameraRoot)
+    //Returns true if we should drop the object
+    public virtual bool Use(Transform cameraRoot)
     {
-        
+        return false;
     }
 
     public virtual void Drop()
@@ -80,6 +81,6 @@ public class Interactable : MonoBehaviour
 
     protected void FinishedTask()
     {
-        if(heldBy) heldBy.GetComponent<JEFF>().TaskCompleted();
+        if(heldBy) heldBy.GetComponent<JEFF>().Reset();
     }
 }
